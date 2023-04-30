@@ -1,16 +1,16 @@
 package main
 
 //#cgo CXXFLAGS: -std=c++11
-//#cgo CFLAGS: -I./inferserver
-//#cgo LDFLAGS: -L/home/wuyiqiang/goinfer/inferserver -L/home/wuyiqiang/onnx/lib -L/usr/local/lib  -lonnxinfer -lonnxruntime -lopencv_core -lopencv_imgcodecs -lopencv_dnn -lstdc++
+//#cgo CFLAGS: -I./include
+//#cgo LDFLAGS: -L/home/wuyiqiang/GoCallOnnx/include/ -L/home/wuyiqiang/onnx/lib -L/usr/local/lib  -lonnxinfer -lonnxruntime -lopencv_core -lopencv_imgcodecs -lopencv_dnn -lstdc++
 //
 //#include "infer.h"
 import "C"
 
 func main() {
 
-	modelPath := C.CString("image.onnx")
-	imagePath := C.CString("car.png")
+	modelPath := C.CString("./models/image.onnx")
+	imagePath := C.CString("./images/car.png")
 	C.inferCifar(modelPath, imagePath)
 }
 
