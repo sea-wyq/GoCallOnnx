@@ -1,0 +1,2 @@
+/usr/bin/ar qc libonnxinfer.a  CMakeFiles/onnxinfer.dir/inferCifar.cpp.o
+/usr/bin/ranlib libonnxinfer.a
