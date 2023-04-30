@@ -1,3 +1,0 @@
-/home/wuyiqiang/GoCallOnnx/include/build/CMakeFiles/rebuild_cache.dir
-/home/wuyiqiang/GoCallOnnx/include/build/CMakeFiles/edit_cache.dir
-/home/wuyiqiang/GoCallOnnx/include/build/CMakeFiles/onnxinfer.dir
