@@ -9,17 +9,11 @@ extern "C"
 {
     void inferCifar(const char *model_path, const char *image_path)
     {
-        // const char *model_path = "image.onnx";
-        // const char *image_path = "car.png";
+
         std::vector<const char *> input_names;
         std::vector<const char *> output_names;
-        // vector<int64_t> input_shape = {1, 3, 32, 32};
-        // vector<int64_t> output_shape = {1, 10};
 
-        // 创建ONNX运行时环境,设置为VERBOSE，方便控制台输出时看到是使用了cpu还是gpu执行
-        Ort::Env env(ORT_LOGGING_LEVEL_VERBOSE, "example"); //
-
-        // 创建ONNX会话
+        Ort::Env env(ORT_LOGGING_LEVEL_VERBOSE, "example"); 
         Ort::SessionOptions session_options;
         Ort::Session session(env, model_path, session_options);
 
