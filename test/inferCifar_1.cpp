@@ -19,6 +19,9 @@ int main(){
 
     // 创建ONNX会话
     Ort::SessionOptions session_options;
+    // Set the CUDA provider
+    OrtSessionOptionsAppendExecutionProvider_CUDA(session_options, 0);
+    session_options.SetGraphOptimizationLevel(ORT_ENABLE_BASIC); // 设置图优化类型
     Ort::Session session(env, model_path, session_options);
 
     // 获得模型有多少个输入和输出，因为是三输入三输出网络，那么input和output数量都为3
@@ -113,4 +116,4 @@ int main(){
     return 0;
 }
 
-// g++ infer.cpp -o infer -I/home/wuyiqiang/onnx/include -L/home/wuyiqiang/onnx/lib -lonnxruntime `pkg-config --cflags --libs opencv4`
+// g++ inferCifar_1.cpp -o infer -I/home/wuyiqiang/onnx/include -I/usr/local/cuda/include -I/usr/include -L/usr/local/cuda/lib64 -L/usr/lib/x86_64-linux-gnu/ -L/home/wuyiqiang/onnx/lib -lonnxruntime -lcudart -lcudnn `pkg-config --cflags --libs opencv4`
