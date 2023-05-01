@@ -3,7 +3,9 @@
 
 ## 前置环境
 - openCV
-- onnxruntime
+- onnxruntime 1.9.0
+- cuda11.4
+- cudnn8.2.4
 
 ## 制作onnx模型推理的静态库onnxinfer
 ```shell
