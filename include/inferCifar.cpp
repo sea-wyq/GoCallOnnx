@@ -20,8 +20,7 @@ extern "C"
         OrtCUDAProviderOptions options;
         options.device_id = 0;
         options.arena_extend_strategy = 0;
-        // options.cuda_mem_limit = (size_t)1 * 1024 * 1024 * 1024;//onnxruntime1.7.0
-        options.gpu_mem_limit = (size_t)1 * 1024 * 1024 * 1024; // onnxruntime1.8.1, onnxruntime1.9.0 1G内存
+        options.gpu_mem_limit = (size_t)1 * 1024 * 1024 * 1024; // 1G内存
         options.cudnn_conv_algo_search = OrtCudnnConvAlgoSearch::EXHAUSTIVE;
         options.do_copy_in_default_stream = 1;
         session_options.AppendExecutionProvider_CUDA(options);
@@ -57,10 +56,8 @@ extern "C"
         std::vector<Ort::Value> input_tensors;
         input_tensors.push_back(
             Ort::Value(Ort::Value::CreateTensor<float>(memory_info,
-                                                       input_values.data(),
-                                                       input_values.size(),
-                                                       input_shape.data(),
-                                                       input_shape.size())));
+                                                        input_values.data(),input_values.size(),
+                                                        input_shape.data(),input_shape.size())));
 
 
         // 获取输出张量的元数据
@@ -72,19 +69,13 @@ extern "C"
         std::vector<Ort::Value> output_tensors;
         output_tensors.push_back(
             Ort::Value::CreateTensor<float>(memory_info,
-                                            output_values.data(),
-                                            output_values.size(),
-                                            output_shape.data(),
-                                            output_shape.size()));
+                                            output_values.data(),output_values.size(),
+                                            output_shape.data(),output_shape.size()));
         // 创建计时器
         auto start_time = std::chrono::high_resolution_clock::now();
         session.Run(Ort::RunOptions{nullptr},
-                    input_names.data(),
-                    input_tensors.data(),
-                    input_names.size(),
-                    output_names.data(),
-                    output_tensors.data(),
-                    output_names.size());
+                    input_names.data(),input_tensors.data(),input_names.size(),
+                    output_names.data(),output_tensors.data(),output_names.size());
 
         float *output_data = output_tensors[0].GetTensorMutableData<float>();
         int predicted_digit = std::distance(output_data, std::max_element(output_data, output_data + 10));
