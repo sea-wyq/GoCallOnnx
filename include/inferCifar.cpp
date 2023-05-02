@@ -21,6 +21,7 @@ extern "C"
         OrtCUDAProviderOptions options;
         options.device_id = 0;
         options.arena_extend_strategy = 0;
+        // options.cuda_mem_limit = (size_t)1 * 1024 * 1024 * 1024;//onnxruntime1.7.0
         options.gpu_mem_limit = (size_t)1 * 1024 * 1024 * 1024; // onnxruntime1.8.1, onnxruntime1.9.0 1G内存
         options.cudnn_conv_algo_search = OrtCudnnConvAlgoSearch::EXHAUSTIVE;
         options.do_copy_in_default_stream = 1;

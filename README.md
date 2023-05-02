@@ -16,7 +16,7 @@ make
 ```
 ## 设置动态库路径
 ```shell
-export LD_LIBRARY_PATH=/home/wuyiqiang/GoCallOnnx/include/build:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/path/to/onnxinfer:$LD_LIBRARY_PATH
 ```
 
 ## 生成可执行程序
