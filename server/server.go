@@ -1,7 +1,7 @@
-package main
+package server
 
 //#cgo CXXFLAGS: -std=c++11
-//#cgo CFLAGS: -I./include
+//#cgo CFLAGS: -I./home/wuyiqiang/GoCallOnnx/include
 //#cgo LDFLAGS: -L/home/wuyiqiang/GoCallOnnx/include/build -L/home/wuyiqiang/onnx/lib -L/usr/local/lib  -lonnxinfer -lonnxruntime -lopencv_core -lopencv_imgcodecs -lopencv_dnn -lstdc++
 //
 //#include "infer.h"

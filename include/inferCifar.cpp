@@ -10,8 +10,7 @@ extern "C"
 {
     void inferCifar(const char *model_path, const char *image_path)
     {
-        // 创建计时器
-        auto start_time = std::chrono::high_resolution_clock::now();
+        
         std::vector<const char *> input_names;
         std::vector<const char *> output_names;
 
@@ -77,7 +76,8 @@ extern "C"
                                             output_values.size(),
                                             output_shape.data(),
                                             output_shape.size()));
-
+        // 创建计时器
+        auto start_time = std::chrono::high_resolution_clock::now();
         session.Run(Ort::RunOptions{nullptr},
                     input_names.data(),
                     input_tensors.data(),
