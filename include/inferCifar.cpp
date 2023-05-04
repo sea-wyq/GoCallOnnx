@@ -8,7 +8,7 @@
 
 extern "C"
 {
-    void inferCifar(const char *model_path, const char *image_path)
+    int inferCifar(const char *model_path, const char *image_path)
     {
         
         std::vector<const char *> input_names;
@@ -25,8 +25,8 @@ extern "C"
         options.do_copy_in_default_stream = 1;
         session_options.AppendExecutionProvider_CUDA(options);
 
-        // Ort::Session session{env, model_path, Ort::SessionOptions{nullptr}}; // CPU
-        Ort::Session session{env, model_path, session_options}; //GPU
+        Ort::Session session{env, model_path, Ort::SessionOptions{nullptr}}; // CPU
+        // Ort::Session session{env, model_path, session_options}; //GPU
 
         Ort::AllocatorWithDefaultOptions allocator;
         size_t num_input_nodes = session.GetInputCount();
@@ -86,8 +86,8 @@ extern "C"
         std::cout << "Predicted digit: " << predicted_digit << std::endl;
         std::cout << "推理时间：" << duration.count() / 1000000.0 << " 秒" << std::endl;
 
-        // Release resources
-        //session.Close();
+        return predicted_digit;
+
         }
 }
 

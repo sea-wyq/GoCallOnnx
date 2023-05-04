@@ -9,8 +9,8 @@ import "C"
 
 type Server struct{}
 
-func (s *Server) InferCifar(ModelPath string, ImagePath string) {
-	C.inferCifar(C.CString(ModelPath), C.CString(ImagePath))
+func (s *Server) InferCifar(ModelPath string, ImagePath string) int {
+	return C.inferCifar(C.CString(ModelPath), C.CString(ImagePath))
 }
 
 /*
