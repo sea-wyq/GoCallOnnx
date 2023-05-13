@@ -1,7 +1,7 @@
 package server
 
 //#cgo CXXFLAGS: -std=c++11
-//#cgo CFLAGS: -I./home/wuyiqiang/GoCallOnnx/include
+//#cgo CFLAGS: -I/home/wuyiqiang/GoCallOnnx/include
 //#cgo LDFLAGS: -L/home/wuyiqiang/GoCallOnnx/include/build -L/home/wuyiqiang/onnx/lib -L/usr/local/lib  -lonnxinfer -lonnxruntime -lopencv_core -lopencv_imgcodecs -lopencv_dnn -lstdc++
 //
 //#include "infer.h"
@@ -10,10 +10,15 @@ import "C"
 type Server struct{}
 
 func (s *Server) InferCifar(ModelPath string, ImagePath string) int {
-	return C.inferCifar(C.CString(ModelPath), C.CString(ImagePath))
+	return int(C.inferCifar(C.CString(ModelPath), C.CString(ImagePath)))
+}
+
+func (s *Server) InferDebias(ModelPath string, RecPath string) int {
+	return int(C.inferDebias(C.CString(ModelPath), C.CString(RecPath)))
 }
 
 /*
 问题：error while loading shared libraries: libonnxruntime.so.1.7.0: cannot open shared object file: No such file or directory
 解决：export LD_LIBRARY_PATH=/home/wuyiqiang/onnx/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/home/wuyiqiang/GoCallOnnx/include/build:$LD_LIBRARY_PATH
 */
