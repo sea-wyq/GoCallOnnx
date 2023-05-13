@@ -14,7 +14,7 @@ extern "C"
         std::vector<const char *> input_names;
         std::vector<const char *> output_names;
 
-        Ort::Env env(ORT_LOGGING_LEVEL_VERBOSE, "example"); // ORT_LOGGING_LEVEL_VERBOSE 获取更详细的日志信息
+        Ort::Env env(ORT_LOGGING_LEVEL_ERROR, "example"); // ORT_LOGGING_LEVEL_VERBOSE 获取更详细的日志信息
         Ort::SessionOptions session_options;
 
         OrtCUDAProviderOptions options;

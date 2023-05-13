@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 include_directories(/home/wuyiqiang/onnx/include /usr/local/include/opencv4)
 link_directories(/home/wuyiqiang/onnx/lib /usr/local/lib)
 
-# 将 infer_servers 文件夹中的所有 CPP 文件添加到一个变量中
+# 将 include 文件夹中的所有 CPP 文件添加到一个变量中
 file(GLOB SRC_FILES "*.cpp")
 
 # 生成静态库 lib1.a

@@ -3,29 +3,29 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <string>
 #include <onnxruntime_cxx_api.h>
 // renwenhao
 
 extern "C"
 {
-    int inferDebias(const char *model_path = "debias.onnx", const char *rec_path = "ref.txt")
+    int inferDebias(const char *model_path, const char *rec_path)
     {
-        vector<const char *> input_names;
-        vector<const char *> output_names;
+        std::vector<const char *> input_names;
+        std::vector<const char *> output_names;
+        std::string line;
+        std::vector<std::string> lines;
+        std::vector<int> user(100);
+        std::vector<int> item(100);
+        std::ifstream infile;
+        infile.open(rec_path);
+        // if (!infile)
+        // {
+        //     std::cout << "无法打开文件!" << std::endl;
+        //     exit(1);
+        // }
 
-        ifstream infile;
-        infile.open("ref.txt");
-        string line;
-        vector<string> lines;
-        vector<int> user(100);
-        vector<int> item(100);
-        if (!infile)
-        {
-            cout << "无法打开文件!" << endl;
-            exit(1);
-        }
-
-        Ort::Env env(ORT_LOGGING_LEVEL_VERBOSE, "example"); // ORT_LOGGING_LEVEL_VERBOSE 获取更详细的日志信息
+        Ort::Env env(ORT_LOGGING_LEVEL_ERROR, "example"); // ORT_LOGGING_LEVEL_VERBOSE 获取更详细的日志信息
         Ort::SessionOptions session_options;
 
         OrtCUDAProviderOptions options;
@@ -54,14 +54,14 @@ extern "C"
         // 获取输入张量的元数据
         Ort::TypeInfo input_info_1 = session.GetInputTypeInfo(0);            // 用于获取 ONNX 模型的第一个输入的类型信息。
         auto input_tensor_info_1 = input_info_1.GetTensorTypeAndShapeInfo(); // 用于获取ONNX模型中张量的类型和形状信息
-        vector<int64_t> input_shape_1 = input_tensor_info_1.GetShape();      // 获取数据形状
-        vector<int> input_values_1(input_tensor_info_1.GetElementCount());   // 获取Tensor的元素数量：
+        std::vector<int64_t> input_shape_1 = input_tensor_info_1.GetShape(); // 获取数据形状
+        std::vector<int> input_values_1(input_tensor_info_1.GetElementCount()); // 获取Tensor的元素数量：
         // cout << input_tensor_info_1.GetElementCount() << endl;
 
         Ort::TypeInfo input_info_2 = session.GetInputTypeInfo(1);            // 用于获取 ONNX 模型的第2个输入的类型信息。
         auto input_tensor_info_2 = input_info_2.GetTensorTypeAndShapeInfo(); // 用于获取ONNX模型中张量的类型和形状信息
-        vector<int64_t> input_shape_2 = input_tensor_info_2.GetShape();      // 获取数据形状
-        vector<int> input_values_2(input_tensor_info_2.GetElementCount());   // 获取Tensor的元素数量：
+        std::vector<int64_t> input_shape_2 = input_tensor_info_2.GetShape(); // 获取数据形状
+        std::vector<int> input_values_2(input_tensor_info_2.GetElementCount()); // 获取Tensor的元素数量：
         // cout << input_tensor_info_2.GetElementCount() << endl;
 
         int count = 0;
@@ -71,16 +71,16 @@ extern "C"
         }
 
         infile.close();
-        for (string l : lines)
+        for (std::string l : lines)
         {
-            string space_delimiter = " ";
+            std::string space_delimiter = " ";
             size_t pos = 0;
             int count = 0;
-            while ((pos = l.find(space_delimiter)) != string::npos)
+            while ((pos = l.find(space_delimiter)) != std::string::npos)
             {
                 if (count == 0)
                 {
-                    int u = stoi(l.substr(0, pos));
+                    int u = std::stoi(l.substr(0, pos));
                     for (int i = 0; i < 100; ++i)
                     {
                         user.emplace_back(u);
@@ -92,15 +92,15 @@ extern "C"
                 }
                 else
                 {
-                    item.emplace_back(stoi(l.substr(0, pos)));
+                    item.emplace_back(std::stoi(l.substr(0, pos)));
                     l.erase(0, pos + space_delimiter.length());
                 }
             }
-            item.emplace_back(stoi(l.substr(0, l.length())));
+            item.emplace_back(std::stoi(l.substr(0, l.length())));
             count = 0;
         }
         Ort::MemoryInfo memory_info = Ort::MemoryInfo::CreateCpu(OrtDeviceAllocator, OrtMemTypeDefault);
-        vector<Ort::Value> input_tensors;
+        std::vector<Ort::Value> input_tensors;
         input_tensors.push_back(Ort::Value(Ort::Value::CreateTensor<int>(memory_info,
                                                                          user.data(),
                                                                          user.size(),
@@ -115,11 +115,11 @@ extern "C"
         // 获取输出张量的元数据
         Ort::TypeInfo output_info = session.GetOutputTypeInfo(0);          // 用于获取 ONNX 模型的第一个输入的类型信息。
         auto output_tensor_info = output_info.GetTensorTypeAndShapeInfo(); // 用于获取ONNX模型中张量的类型和形状信息
-        vector<int64_t> output_shape = output_tensor_info.GetShape();      // 获取数据形状
-        vector<float> output_values(output_tensor_info.GetElementCount());
+        std::vector<int64_t> output_shape = output_tensor_info.GetShape(); // 获取数据形状
+        std::vector<float> output_values(output_tensor_info.GetElementCount());
         // cout << output_tensor_info.GetElementCount() << endl; // 获取Tensor的元素数量：
 
-        vector<Ort::Value> output_tensors;
+        std::vector<Ort::Value> output_tensors;
         output_tensors.push_back(Ort::Value::CreateTensor<float>(memory_info,
                                                                  output_values.data(),
                                                                  output_values.size(),
@@ -135,13 +135,13 @@ extern "C"
 
         float *output_data = output_tensors[0].GetTensorMutableData<float>();
         count = 0;
-        vector<pair<int, float>> res;
+        std::vector<std::pair<int, float>> res;
         for (int i : item)
         {
-            res.emplace_back(make_pair(i, output_data[count++]));
+            res.emplace_back(std::make_pair(i, output_data[count++]));
         }
-        sort(res.begin(), res.end(), [&](pair<int, float> a, pair<int, float> b)
-             { return a.second > b.second; });
+        std::sort(res.begin(), res.end(), [&](std::pair<int, float> a, std::pair<int, float> b)
+                  { return a.second > b.second; });
         return  res[0].first;
     }
 }

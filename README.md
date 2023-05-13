@@ -3,7 +3,7 @@
 
 ## 前置环境
 - openCV
-- onnxruntime 1.9.0
+- onnxruntime 1.9.0 - 1.12.0
 - cuda11.4
 - cudnn8.2.4
 
